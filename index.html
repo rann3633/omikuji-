@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Interactive Omikuji</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a90e2">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f06, #4a90e2);
+            color: white;
+        }
+        #container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        #funButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #333;
+            background: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #funButton:hover {
+            background: #ffeb3b;
+            transform: scale(1.1);
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>おみくじどうですか？</h1>
+        <p>クリックして運勢を占おう！</p>
+        <button id="funButton">おみくじを引く</button>
+        <div id="output"></div>
+    </div>
+    <script>
+        const funButton = document.getElementById('funButton');
+        const output = document.getElementById('output');
+
+        const messages = [
+            '✨ 大吉 ✨ とても良い日になりそう！',
+            '😊 中吉 😊 まあまあ良いことがあるかも！',
+            '😌 小吉 😌 小さな幸せに気づこう！',
+            '😅 凶 😅 注意して過ごそう。',
+            '💀 大凶 💀 最悪の事態に備えよう！'
+        ];
+
+        funButton.addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            const randomMessage = messages[randomIndex];
+            output.textContent = randomMessage;
+
+            output.style.transform = 'scale(1.5)';
+            output.style.color = randomIndex === 0 ? 'gold' : randomIndex === 4 ? 'red' : 'white';
+            setTimeout(() => {
+                output.style.transform = 'scale(1)';
+                output.style.color = 'white';
+            }, 500);
+        });
+
+        // サービスワーカーの登録
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => console.log('Service Worker registered:', registration))
+                .catch(error => console.error('Service Worker registration failed:', error));
+        }
+    </script>
+</body>
+</html>
